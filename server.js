@@ -22,19 +22,19 @@ const fs = require('fs');
 const { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll,uploadBytes } =require('@firebase/storage');
 const path = require('path')
 const { body, validationResult } = require('express-validator');
-const stripe = Stripe('sk_test_51PQkIBFHEvSwKEHycEWsKebEtR4sWNvEhHmCpaOyHckt0V7didH3cuWLsHR19hjkwsSuchf6mGI8eYvRILAaG2Fj00nDHpkVzu');
-const watchlist = require('./route/watchlist')
-const cart = require('./route/cart')
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-app.use(cors())
-app.use(express.json());
-app.use('/', watchlist)
-app.use('/', cart )
 require('./connect/Connect')
 require('./connect/Imageconfig')
 
+app.use(cors())
+app.use(express.json());
 
+//-------------------------------------------Multer Config--------------------------------------------------
 const upload = multer({storage : multer.memoryStorage()});
+//---------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------Validation-----------------------------------------------------
 const validate = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -42,9 +42,24 @@ const validate = (req, res, next) => {
     }
     next();
   };
+//-----------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------importing Routes----------------------------------------------
+
+const watchlist = require('./routes/watchlist')
+const cart = require('./routes/cart')
+
+//---------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------Using Routes--------------------------------------------------
+app.use('/', watchlist)
+app.use('/', cart )
+
+//---------------------------------------------------------------------------------------------------------
+
 
 app.get('/',async(req,res)=>{
-  
+  return res.status(200).send('Welcome to the server');
 })
 
 
@@ -82,6 +97,7 @@ app.post('/bills', [
       res.status(500).json({ message: 'Error creating bill', error: error.message });
   }
 });
+
 app.put('/update', async (req, res) => {
   const { seller, id } = req.body;
 
