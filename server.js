@@ -144,6 +144,7 @@ res.send(respon)
   ], async (req, res) => {
     try {
       const { email, password } = req.body;
+      console.log(req.body)
       console.log({ email, password });
       
       const user = await UserModel.findOne({ email });
