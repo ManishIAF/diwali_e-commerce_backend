@@ -26,8 +26,8 @@ router.put('/add', async(req, res)=>{
         return res.send(err)
     }
 })
-router.post('/cart', async (req, res) => {
-    const { id } = req.body;
+router.get('/cart/:id', async (req, res) => {
+    const { id } = req.params;
     try {
       const user = await User.findById(id);
       if (!user) {
