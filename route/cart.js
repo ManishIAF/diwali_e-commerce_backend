@@ -28,6 +28,7 @@ router.put('/add', async(req, res)=>{
 })
 router.get('/cart/:id', async (req, res) => {
     const { id } = req.params;
+    console.log('user id : ',id)
     try {
       const user = await User.findById(id);
       if (!user) {
