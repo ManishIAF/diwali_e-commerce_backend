@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const express = require('express')
+import mongoose from 'mongoose';
 
 const Schema = new mongoose.Schema({
     seller : {
@@ -26,4 +25,4 @@ const Schema = new mongoose.Schema({
 
 const GirlModel = mongoose.model('Girl', Schema);
 
-module.exports = GirlModel;
+export default GirlModel;

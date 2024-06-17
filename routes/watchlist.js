@@ -1,10 +1,7 @@
-const express = require('express');
-const app = express();
-const router = express.Router();
-const User = require('../model/UserInfo');
-const UserModel = require('../model/User');
+import express from 'express';
+import User from '../model/UserInfo.js';
 
-router.use(express.json());  
+const router = express.Router();
 
 router.put('/watchlist', async (req, res) => {
     try {
@@ -75,4 +72,5 @@ router.put('/watchlist-delete', async (req, res) => {
         res.status(500).send({ error: err.message });
     }
 });
-module.exports = router;
+
+export default router;

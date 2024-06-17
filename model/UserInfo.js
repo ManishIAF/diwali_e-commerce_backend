@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const express = require('express')
+import mongoose from "mongoose";
+
 const userInfo = mongoose.Schema({
     name: {
         type: String,
@@ -36,4 +36,4 @@ const userInfo = mongoose.Schema({
 
 const UserInfo = mongoose.model("userInfo", userInfo)
 
-module.exports = UserInfo;
+export default UserInfo;

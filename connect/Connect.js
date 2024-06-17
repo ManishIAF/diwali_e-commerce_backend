@@ -1,3 +1,13 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
-mongoose.connect(process.env.MONGO_URL).then(()=>console.log("Connected to db")).catch((e)=>console.log(e))
+
+const db = async () => {
+    try{
+        await mongoose.connect(process.env.MONGO_URL);
+        console.log('database Connected')
+    }catch (error){
+         console.log('Error when data base connection', error)
+    }
+}
+
+export default db;

@@ -1,9 +1,7 @@
-const express = require('express');
-const app = express();
+import express from 'express';
 const router = express.Router();
-const User = require('../model/UserInfo')
 
-router.use(express.json());  
+import User from '../model/UserInfo.js';  
 
 router.put('/add', async(req, res)=>{
     const { id, title, price, quantity, image, userId } = req.body;
@@ -72,4 +70,4 @@ router.put('/cart-delete', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

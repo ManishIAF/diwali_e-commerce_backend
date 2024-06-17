@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const express = require('express')
+import mongoose from 'mongoose'
 
 const Schema = new mongoose.Schema({
     seller : {
@@ -33,4 +32,4 @@ orderDelivered : {
 })
 const Order = mongoose.model('OrderTrack', Schema)
 
-module.exports = Order
+export default Order
