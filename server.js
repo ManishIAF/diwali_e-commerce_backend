@@ -49,7 +49,7 @@ app.use('/', watchlist)
 app.use('/', cart )
 // app.use('/register', registerRoute )
 app.use('/login', loginRoute )
-app.use('/product', clothingRouter)
+app.use('/clothing', clothingRouter)
 
 //---------------------------------------------------------------------------------------------------------
 
