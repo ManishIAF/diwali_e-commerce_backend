@@ -38,4 +38,13 @@ const Clothing = async(req,res) => {
     }
 }
 
-export {Clothing}
+const clothingById = async(req,res) => {
+    try {
+        const id = req.params.id;
+        const clothing = await Products.findById(id);
+        res.status(200).json(clothing)
+    } catch (error) {
+        console.log(error)
+    }
+}
+export {Clothing,clothingById}
