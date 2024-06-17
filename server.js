@@ -27,7 +27,9 @@ const app = express()
 import connectDB from './connect/Connect.js'
 import './connect/Imageconfig.js'
 
-app.use(cors())
+app.use(cors({
+  origin:'https://diwali-e-commerce-backend-n2a2.onrender.com'
+}))
 app.use(express.json());
 app.use(morgan('dev'));
 
