@@ -185,9 +185,9 @@ res.send(respon)
 app.get('/girl',async (req,res)=>{
   try{
 const data = await GirlModel.find()
-res.send(data)
+return res.send(data)
   }catch(err){
-    res.send(err)
+    return res.send(err)
   }
 })
 app.post('/girl', upload.single('image'), async (req, res) => {
@@ -228,15 +228,15 @@ app.post('/girl', upload.single('image'), async (req, res) => {
 
         await newImage.save();
 
-        res.json({ message: 'Image uploaded and data saved successfully', data: newImage });
+        return res.json({ message: 'Image uploaded and data saved successfully', data: newImage });
       }
     );
 
-    streamifier.createReadStream(imageFile.buffer).pipe(uploadStream);
+    // streamifier.createReadStream(imageFile.buffer).pipe(uploadStream);
 
   } catch (error) {
     console.error('Error processing request:', error);
-    res.status(500).json({ error: 'An error occurred' });
+    return res.status(500).json({ error: 'An error occurred' });
   }
 });
 app.put('/girl', async (req, res) => {
@@ -259,10 +259,10 @@ app.put('/girl', async (req, res) => {
       return res.status(404).send({ message: 'Product not found' });
     }
 
-    res.status(200).send(updatedProduct);
+    return res.status(200).send(updatedProduct);
   } catch (err) {
     console.error(err);
-    res.status(500).send({ message: 'Internal server error' });
+    return res.status(500).send({ message: 'Internal server error' });
   }
 });
 app.delete('/girl', async(req, res)=>{
@@ -281,20 +281,20 @@ app.delete('/girl', async(req, res)=>{
     }
     
     
-    res.status(200).json({ message: 'Product deleted successfully' });
+    return res.status(200).json({ message: 'Product deleted successfully' });
   } catch (error) {
     
     console.error('Error deleting product:', error);
-    res.status(500).json({ error: 'An error occurred while deleting the product' });
+    return res.status(500).json({ error: 'An error occurred while deleting the product' });
   }
 })
 
 app.get('/men',async (req,res)=>{
   try{
 const data = await MenModel.find()
-res.send(data)
+return res.send(data)
   }catch(err){
-    res.send(err)
+    return res.send(err)
   }
 })
 app.post('/men', upload.single('image'), async (req, res) => {
@@ -335,7 +335,7 @@ app.post('/men', upload.single('image'), async (req, res) => {
 
         await newImage.save();
 
-        res.json({ message: 'Image uploaded and data saved successfully', data: newImage });
+        return res.json({ message: 'Image uploaded and data saved successfully', data: newImage });
       }
     );
 
@@ -369,7 +369,7 @@ app.put('/men', async (req, res) => {
     res.status(200).send(updatedProduct);
   } catch (err) {
     console.error(err);
-    res.status(500).send({ message: 'Internal server error' });
+    return res.status(500).send({ message: 'Internal server error' });
   }
 });
 app.delete('/men', async(req, res)=>{
@@ -388,11 +388,11 @@ if (!id) {
     }
 
    
-    res.status(200).json({ message: 'Product deleted successfully' });
+    return res.status(200).json({ message: 'Product deleted successfully' });
   } catch (error) {
     
     console.error('Error deleting product:', error);
-    res.status(500).json({ error: 'An error occurred while deleting the product' });
+    return res.status(500).json({ error: 'An error occurred while deleting the product' });
   }
 })
 
@@ -400,10 +400,9 @@ if (!id) {
 app.get('/others',async (req,res)=>{
   try{
 const data = await OtherModel.find()
-res.send(data)
-res.send(data)
+return res.send(data)
   }catch(err){
-    res.send(err)
+    return res.send(err)
   }
 })
 app.post('/others', upload.single('image'), async (req, res) => {
@@ -444,7 +443,7 @@ app.post('/others', upload.single('image'), async (req, res) => {
   
           await newImage.save();
   
-          res.json({ message: 'Image uploaded and data saved successfully', data: newImage });
+          return res.json({ message: 'Image uploaded and data saved successfully', data: newImage });
         }
       );
   
@@ -478,7 +477,7 @@ app.put('/others', async (req, res) => {
     res.status(200).send(updatedProduct);
   } catch (err) {
     console.error(err);
-    res.status(500).send({ message: 'Internal server error' });
+    return res.status(500).send({ message: 'Internal server error' });
   }
 });
 app.delete('/other', async(req, res)=>{
@@ -501,7 +500,7 @@ if (!id) {
   } catch (error) {
     
     console.error('Error deleting product:', error);
-    res.status(500).json({ error: 'An error occurred while deleting the product' });
+    return res.status(500).json({ error: 'An error occurred while deleting the product' });
   }
 })
 
@@ -517,7 +516,7 @@ app.post('/others-data', async (req, res) => {
     res.send(girlsData);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server Error');
+    return res.status(500).send('Server Error');
   }
 });
 
@@ -534,7 +533,7 @@ try {
   res.json(menData);
 } catch (err) {
   console.error('Error fetching data:', err);
-  res.status(500).send('Server Error');
+  return res.status(500).send('Server Error');
 }
 });
 
@@ -548,10 +547,10 @@ console.log(seller)
           return res.status(401).send("No data");
       }
 console.log(data)
-      res.send(data);
+return res.send(data);
   } catch (err) {
       console.error(err);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
   }
 })
 
