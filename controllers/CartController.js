@@ -71,7 +71,7 @@ const removeFromCart = async(req, res)=>{
 
         const { userId } = req.user;
         const { productId } = req.query;
-        
+        console.log('req.query : ',req.query)
         console.log('id : ',productId)
         console.log('userId : ',userId)
 
