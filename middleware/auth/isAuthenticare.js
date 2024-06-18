@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 const isAuthenticated = async(req,res,next) => {
     try {
             const authHeader = req.headers['Authorization'] || req.headers['authorization']
-            
+            console.log('authHeader : ',authHeader)
             if(!authHeader) return next(new ErrorHandler(401,"Please logIn to access"))
 
             const token = authHeader.split(' ')[1]
