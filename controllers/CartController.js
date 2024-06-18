@@ -45,5 +45,32 @@ const addToCart = async(req, res)=>{
     }
 }
 
+const removeFromCart = async(req, res)=>{
+    try{
+        const { userId, productId } = req.body;
+
+        if (!userId || !productId) {
+            return res.status(400).send({ error: 'User ID and Product ID are required' });
+        }
+
+        const user = await User.findOne({ userId: userId });
+        if (!user) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+
+        if (!user.cart) {
+            user.cart = [];
+        }
+
+        user.cart = user.cart.filter(item => item._id.toString() !== productId);
+
+        await user.save();
+
+        res.status(200).send({ message: 'cart updated successfully', cart: user.cart });
+    }catch(err){
+        res.status(500).send({ error: err.message });
+    }
+}
+
 
 export {addToCart}

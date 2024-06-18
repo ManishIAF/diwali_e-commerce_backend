@@ -45,7 +45,7 @@ const upload = multer({storage : multer.memoryStorage()});
 // import registerRoute from './routes/registerRoute.js'
 // import loginRoute from './routes/loginRoute.js'
 import watchlist from './routes/watchlist.js'
-import cartRoute from './routes/cart.js'
+import cartRoute from './routes/cartRoute.js'
 import clothingRouter from './routes/clothingRoute.js'
 //---------------------------------------------------------------------------------------------------------
 
