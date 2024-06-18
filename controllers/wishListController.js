@@ -24,7 +24,7 @@ const addToWishList = async(req, res)=>{
         }
 
         const wishlist = await Wishlist.findOne({userId});
-        console.log('wishlist : ',wishlist)
+        console.log('wishlist ID : ',wishlist?._id)
 
         if (!wishlist?._id) {
             await Wishlist.create({
