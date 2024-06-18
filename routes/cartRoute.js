@@ -2,11 +2,11 @@ import express from 'express';
 
 const router = express.Router();
 
-import { addToCart,getCart } from '../controllers/CartController.js';
+import { addToCart,getCart,removeFromCart } from '../controllers/CartController.js';
 
 import { isAuthenticated } from '../middleware/auth/isAuthenticare.js';
-router.route('/').get(isAuthenticated,getCart)
-router.put('/:id',isAuthenticated,addToCart)
+router.route('/').get(isAuthenticated,getCart).put(isAuthenticated,addToCart).delete(isAuthenticated,removeFromCart)
+// router.put('/',isAuthenticated,addToCart).delete(isAuthenticated,removeFromCart)
 // router.get('/cart/:id', async (req, res) => {
 //     const { id } = req.params;
 //     console.log('user id : ',id)

@@ -18,14 +18,8 @@ const getCart = async(req, res)=> {
 
 const addToCart = async(req, res)=>{
     try{
-        console.log('req.query : ',req.query)
-        console.log('req.body : ',req.body)
-        console.log('req.user : ',req.user)
-        console.log('req.params : ',req.params)
-        const { id } = req.params;
+        const { id } = req.query;
         const {userId} = req.user;
-        console.log('id : ',id)
-        console.log('userId : ',userId)
 
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
@@ -42,12 +36,10 @@ const addToCart = async(req, res)=>{
                      // quantity: req.body.quantity
                  }
              });
- 
-             console.log('saved1 : ',saved)
          }
 
         const foundProductInCart = await cart.products.find(product => product.productId.toString() === id);
-         console.log('foundProductInCart : ',foundProductInCart)
+
         if (foundProductInCart) {
             return res.status(400).json({success:false, message:'Product already exists in cart' });
         }
@@ -63,12 +55,10 @@ const addToCart = async(req, res)=>{
                    productId: id,
                    // quantity: req.body.quantity
                } } });
-               console.log('saved : ',saved)
            }
         // }
 
         // const updatedCart = await Cart.updateOne({userId:id, 'products.productId': req.body.productId}, { $set: { 'products.$.quantity': req.body.quantity } });
-        console.log('updatedCart : ',updatedCart)
         return res.status(200).send({ message: 'Cart updated successfully', watchlist: user.watchlist });
        
     }catch(err){
@@ -78,30 +68,26 @@ const addToCart = async(req, res)=>{
 
 const removeFromCart = async(req, res)=>{
     try{
-        const { userId, productId } = req.body;
 
-        if (!userId || !productId) {
-            return res.status(400).send({ error: 'User ID and Product ID are required' });
+        const { userId } = req.user;
+        const { id } = req.body;
+        
+        console.log('id : ',id)
+        console.log('userId : ',userId)
+
+        if (!id) {
+            return res.status(400).json({ success:false,message:'Product ID are required' });
         }
 
-        const user = await User.findOne({ userId: userId });
-        if (!user) {
-            return res.status(404).send({ error: 'User not found' });
-        }
+        //find product by userId and product _id in cart and delete
 
-        if (!user.cart) {
-            user.cart = [];
-        }
-
-        user.cart = user.cart.filter(item => item._id.toString() !== productId);
-
-        await user.save();
-
-        res.status(200).send({ message: 'cart updated successfully', cart: user.cart });
+        const deletedProduct = await Cart.findOneAndUpdate({ userId }, { $pull: { products: { _id: productId } } }, { new: true });
+        console.log('deletedProduct : ',deletedProduct)
+        res.status(200).json({success:true,message: 'cart updated successfully'});
     }catch(err){
         res.status(500).send({ error: err.message });
     }
 }
 
 
-export {addToCart,getCart}
+export {addToCart,getCart,removeFromCart}
