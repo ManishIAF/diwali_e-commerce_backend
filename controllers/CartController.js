@@ -4,7 +4,7 @@ const getCart = async(req, res)=> {
     try {
         const { userId } = req.user;
         console.log('user id : ',userId)
-        const caetData = await Cart.findById(userId).populate('products.productId');
+        const caetData = await Cart.findOne({userId}).populate('products.productId');
         if (!caetData) {
           return res.status(404).json({ error: 'User not found' });
         }
