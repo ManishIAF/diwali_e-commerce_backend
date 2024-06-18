@@ -45,7 +45,7 @@ const addToCart = async(req, res)=>{
              console.log('saved1 : ',saved)
          }
 
-        const foundProductInCart = await cart.products.find(product => product.productId === id);
+        const foundProductInCart = await cart.products.includes(id);
 
         if (foundProductInCart) {
             return res.status(400).json({success:false, message:'Product already exists in cart' });
