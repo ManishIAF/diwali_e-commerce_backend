@@ -5,20 +5,23 @@ const addToCart = async(req, res)=>{
         
         const { id } = req.params;
         const {_id:userId} = req.user;
-
+        console.log('id : ',id)
+        console.log('userId : ',userId)
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
         }        
         console.log('userId : ',userId)
-        const user = await Cart.findOne({userId});
-        console.log('user : ',user)
-        const findProduct = await user.products.find(product => product.productId === req.body.productId);
 
-        if (findProduct) {
+        const cart = await Cart.findOne({_id:id});
+        console.log('user : ',cart)
+
+        const foundProductInCart = await cart.products.find(product => product.productId === req.body.productId);
+
+        if (foundProductInCart) {
             return res.status(400).json({success:false, message:'Product already exists in cart' });
         }
 
-        if (!user?._id) {
+        if (!cart?._id) {
            const saved = await Cart.create({
                 userId: id,
                 products: {
@@ -36,7 +39,7 @@ const addToCart = async(req, res)=>{
         // });
 
         // if (!isProductExist) {
-           if(user?._id){
+           if(cart?._id){
                const saved =  await Cart.updateOne({userId:id}, { $push: { products: {
                    productId: req.body.productId,
                    // quantity: req.body.quantity
