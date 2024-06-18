@@ -43,14 +43,14 @@ const addToWishList = async(req, res)=>{
         if (foundProductInWishlist) {
             return res.status(400).json({success:false, message:'already in wishlist' });
         }
+
         console.log('I am checking product in wishlist')
-        if(wishlist?._id){
-            await Wishlist.updateOne({userId}, { $push: { products: {
-                productId: id,
-            } } });
-            console.log('I am updating product to wishlist')
-            return res.status(200).json({ message: 'added to wishlist',success:true });
-        }
+
+        await Wishlist.updateOne({userId}, { $push: { products: {
+            productId: id,
+        } } });
+        console.log('I am updating product to wishlist')
+        return res.status(200).json({ message: 'added to wishlist',success:true });
 
        
     }catch(err){
