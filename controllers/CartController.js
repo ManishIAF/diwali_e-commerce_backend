@@ -2,7 +2,7 @@ import Cart from '../model/CartModel.js';
 
 const getCart = async(req, res)=> {
     try {
-        const { id:userId } = req.params;
+        const { userId } = req.user;
         console.log('user id : ',userId)
         const caetData = await Cart.findById(userId).populate('products.productId');
         if (!caetData) {
