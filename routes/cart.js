@@ -1,43 +1,24 @@
 import express from 'express';
+
 const router = express.Router();
 
-import User from '../model/UserInfo.js';  
+import { addToCart } from '../controllers/CartController.js';
 
-router.put('/add', async(req, res)=>{
-    const { id, title, price, quantity, image, userId } = req.body;
-    try{
-        if (!id || !title || !price || !quantity || !image) {
-            return res.status(400).send({ error: 'All fields are required' });
-        }        
-        const user = await User.findById(userId);       
-        if (!user) {
-            return res.status(404).send({ error: 'User not found' });
-        }
-        user.cart.push({ _id : id, title, price, quantity, image });
-
-       
-        await user.save();
-        
-        return res.status(200).send({ message: 'Cart updated successfully', watchlist: user.watchlist });
-       
-    }catch(err){
-        return res.send(err)
-    }
-})
-router.get('/cart/:id', async (req, res) => {
-    const { id } = req.params;
-    console.log('user id : ',id)
-    try {
-      const user = await User.findById(id);
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-      return res.json(user.cart);
-    } catch (err) {
-      console.error('Error fetching cart data:', err);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  });
+router.put('/:id', addToCart)
+// router.get('/cart/:id', async (req, res) => {
+//     const { id } = req.params;
+//     console.log('user id : ',id)
+//     try {
+//       const user = await User.findById(id);
+//       if (!user) {
+//         return res.status(404).json({ error: 'User not found' });
+//       }
+//       return res.json(user.cart);
+//     } catch (err) {
+//       console.error('Error fetching cart data:', err);
+//       return res.status(500).json({ error: 'Internal server error' });
+//     }
+//   });
   
 router.put('/cart-delete', async (req, res) => {
     try {
