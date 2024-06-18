@@ -75,7 +75,7 @@ const removeFromCart = async(req, res)=>{
         console.log('id : ',productId)
         console.log('userId : ',userId)
 
-        if (!id) {
+        if (!productId) {
             return res.status(400).json({ success:false,message:'Product ID are required' });
         }
 
