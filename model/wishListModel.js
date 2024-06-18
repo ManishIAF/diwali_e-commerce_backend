@@ -12,10 +12,10 @@ const WishListSchema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'Product'
         },
-        quantity: {
-            type: Number,
-            min:0
-        }
+        // quantity: {
+        //     type: Number,
+        //     min:0
+        // }
     }]
 }, 
 {
