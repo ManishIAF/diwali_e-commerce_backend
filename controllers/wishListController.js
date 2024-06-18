@@ -33,6 +33,7 @@ const addToWishList = async(req, res)=>{
                      // quantity: req.body.quantity
                  }
              });
+             console.log('I am adding new product to wishlist')
             return res.status(200).json({ message: 'added to wishlist',success:true });
          }
 
@@ -46,7 +47,7 @@ const addToWishList = async(req, res)=>{
             await Wishlist.updateOne({userId}, { $push: { products: {
                 productId: id,
             } } });
-
+            console.log('I am updating product to wishlist')
             return res.status(200).json({ message: 'added to wishlist',success:true });
         }
 
