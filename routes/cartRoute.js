@@ -2,10 +2,10 @@ import express from 'express';
 
 const router = express.Router();
 
-import { addToCart } from '../controllers/CartController.js';
+import { addToCart,getCart } from '../controllers/CartController.js';
 
 import { isAuthenticated } from '../middleware/auth/isAuthenticare.js';
-
+router.route('/').get(isAuthenticated,getCart)
 router.put('/:id',isAuthenticated,addToCart)
 // router.get('/cart/:id', async (req, res) => {
 //     const { id } = req.params;

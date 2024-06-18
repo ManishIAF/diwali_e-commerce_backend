@@ -1,8 +1,26 @@
 import Cart from '../model/CartModel.js';
 
+const getCart = async(req, res)=> {
+    try {
+        const { id:userId } = req.params;
+        console.log('user id : ',userId)
+        const caetData = await Cart.findById(userId).populate('products.productId');
+        if (!caetData) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+        return res.json(caetData);
+      } catch (err) {
+        console.error('Error fetching cart data:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+}
+
 const addToCart = async(req, res)=>{
     try{
-        
+        console.log('req.query : ',req.query)
+        console.log('req.body : ',req.body)
+        console.log('req.user : ',req.user)
+        console.log('req.params : ',req.params)
         const { id } = req.query;
         const {_id:userId} = req.user;
         console.log('id : ',id)
@@ -85,4 +103,4 @@ const removeFromCart = async(req, res)=>{
 }
 
 
-export {addToCart}
+export {addToCart,getCart}
