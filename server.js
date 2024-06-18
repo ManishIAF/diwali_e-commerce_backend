@@ -47,6 +47,7 @@ const upload = multer({storage : multer.memoryStorage()});
 import watchlist from './routes/watchlist.js'
 import cartRoute from './routes/cartRoute.js'
 import clothingRouter from './routes/clothingRoute.js'
+import { ErrorMiddleware } from './middleware/ErrorMiddleware.js';
 //---------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------Using Routes--------------------------------------------------
@@ -565,6 +566,7 @@ const getImageData = async (imagePath) => {
   }
 };
 
+app.use(ErrorMiddleware)
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async() => {

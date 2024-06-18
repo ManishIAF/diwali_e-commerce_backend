@@ -4,7 +4,9 @@ const router = express.Router();
 
 import { addToCart } from '../controllers/CartController.js';
 
-router.put('/:id', addToCart)
+import { isAuthenticated } from '../middleware/auth/isAuthenticare.js';
+
+router.put('/:id',isAuthenticated,addToCart)
 // router.get('/cart/:id', async (req, res) => {
 //     const { id } = req.params;
 //     console.log('user id : ',id)

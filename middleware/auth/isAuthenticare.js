@@ -1,9 +1,8 @@
-import { ErrorHandler } from "../utils/errorHendler.js"
+import { ErrorHandler } from "../../utils/ErrorHandler.js"
 import jwt from "jsonwebtoken"
 
 const isAuthenticated = async(req,res,next) => {
     try {
-
             const authHeader = req.headers['Authorization'] || req.headers['authorization']
             
             if(!authHeader) return next(new ErrorHandler(401,"Please logIn to access"))
