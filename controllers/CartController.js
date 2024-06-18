@@ -20,7 +20,10 @@ const addToCart = async(req, res)=>{
     try{
         const { id } = req.query;
         const {userId} = req.user;
-
+        console.log('id : ',id)
+        console.log('userId : ',userId)
+        console.log('req query : ',req.query)
+        console.log('req params : ',req.params)
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
         }
