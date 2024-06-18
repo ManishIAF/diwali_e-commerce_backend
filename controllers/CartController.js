@@ -22,7 +22,7 @@ const addToCart = async(req, res)=>{
         console.log('req.user : ',req.user)
         console.log('req.params : ',req.params)
         const { id } = req.params;
-        const {_id:userId} = req.user;
+        const {userId} = req.user;
         console.log('id : ',id)
         console.log('userId : ',userId)
 
