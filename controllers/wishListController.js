@@ -46,12 +46,11 @@ const addToWishList = async(req, res)=>{
 
         console.log('I am checking product in wishlist')
 
-        await Wishlist.updateOne({userId}, { $push: { products: {
+        const ggg = await Wishlist.updateOne({userId}, { $push: { products: {
             productId: id,
         } } });
-        console.log('I am updating product to wishlist')
+        console.log('I am updating product to wishlist',ggg)
         return res.status(200).json({ message: 'added to wishlist',success:true });
-
        
     }catch(err){
         return res.send(err)
