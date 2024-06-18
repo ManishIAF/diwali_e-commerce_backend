@@ -3,34 +3,34 @@ import Cart from '../model/CartModel.js';
 const addToCart = async(req, res)=>{
     try{
         
-        const { id } = req.params;
+        const { id } = req.query;
         const {_id:userId} = req.user;
         console.log('id : ',id)
         console.log('userId : ',userId)
+
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
-        }        
-        console.log('userId : ',userId)
+        }
 
-        const cart = await Cart.findOne({_id:id});
+        const cart = await Cart.findOne({userId});
         console.log('user : ',cart)
 
-        const foundProductInCart = await cart.products.find(product => product.productId === req.body.productId);
+        if (!cart?._id) {
+            const saved = await Cart.create({
+                 userId,
+                 products: {
+                     productId: id,
+                     // quantity: req.body.quantity
+                 }
+             });
+ 
+             console.log('saved1 : ',saved)
+         }
+
+        const foundProductInCart = await cart.products.find(product => product.productId === id);
 
         if (foundProductInCart) {
             return res.status(400).json({success:false, message:'Product already exists in cart' });
-        }
-
-        if (!cart?._id) {
-           const saved = await Cart.create({
-                userId: id,
-                products: {
-                    productId: req.body.productId,
-                    quantity: req.body.quantity
-                }
-            });
-
-            console.log('saved1 : ',saved)
         }
 
         // const isProductExist = await Cart.findOne({
@@ -40,15 +40,15 @@ const addToCart = async(req, res)=>{
 
         // if (!isProductExist) {
            if(cart?._id){
-               const saved =  await Cart.updateOne({userId:id}, { $push: { products: {
-                   productId: req.body.productId,
+               const saved =  await Cart.updateOne({userId}, { $push: { products: {
+                   productId: id,
                    // quantity: req.body.quantity
                } } });
                console.log('saved : ',saved)
            }
         // }
 
-        const updatedCart = await Cart.updateOne({userId:id, 'products.productId': req.body.productId}, { $set: { 'products.$.quantity': req.body.quantity } });
+        // const updatedCart = await Cart.updateOne({userId:id, 'products.productId': req.body.productId}, { $set: { 'products.$.quantity': req.body.quantity } });
         console.log('updatedCart : ',updatedCart)
         return res.status(200).send({ message: 'Cart updated successfully', watchlist: user.watchlist });
        
