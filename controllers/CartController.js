@@ -8,6 +8,7 @@ const getCart = async(req, res)=> {
         if (!caetData) {
           return res.status(404).json({ error: 'User not found' });
         }
+        console.log('caetData : ',caetData)
         return res.json(caetData);
       } catch (err) {
         console.error('Error fetching cart data:', err);
