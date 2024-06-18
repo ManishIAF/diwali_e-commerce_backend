@@ -4,13 +4,14 @@ const addToCart = async(req, res)=>{
     try{
         
         const { id } = req.params;
+        const {_id:userId} = req.user;
 
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
         }        
-
-        const user = await Cart.findOne({userId:id});
-
+        console.log('userId : ',userId)
+        const user = await Cart.findOne({userId});
+        console.log('user : ',user)
         const findProduct = await user.products.find(product => product.productId === req.body.productId);
 
         if (findProduct) {
