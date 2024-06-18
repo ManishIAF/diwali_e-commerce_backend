@@ -82,10 +82,11 @@ const removeFromCart = async(req, res)=>{
 
         //find product by userId and product _id in cart and delete
 
-        const deletedProduct = await Cart.findOneAndUpdate({ userId }, { $pull: { products: { _id: productId } } }, { new: true });
+        const deletedProduct = await Cart.findOneAndUpdate({ userId }, { $pull: { products: { productId: productId } } }, { new: true });
         console.log('deletedProduct : ',deletedProduct)
-        res.status(200).json({success:true,message: 'cart updated successfully'});
+        res.status(200).json({success:true,message: 'cart deleted successfully'});
     }catch(err){
+        console.log('err : ',err)
         res.status(500).send({ error: err.message });
     }
 }
