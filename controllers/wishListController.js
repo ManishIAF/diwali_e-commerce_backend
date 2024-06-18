@@ -17,13 +17,16 @@ const addToWishList = async(req, res)=>{
     try{
         const { id } = req.query;
         const {userId} = req.user;
+
         console.log('userId : ',userId)
         console.log('id : ',id)
+        
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
         }
 
         const wishlist = await Wishlist.findOne({userId});
+        
         console.log('wishlist ID : ',wishlist?._id)
 
         if (!wishlist?._id) {
@@ -34,13 +37,18 @@ const addToWishList = async(req, res)=>{
                      // quantity: req.body.quantity
                  }
              });
-             console.log('I am adding new product to wishlist')
+            
+            console.log('I am adding new product to wishlist')
             return res.status(200).json({ message: 'added to wishlist',success:true });
          }
-         console.log('I am checking product in wishlist')
-        const foundProductInWishlist = await Wishlist.products.find(product => product.productId.toString() === id);
-         console.log('foundProductInWishlist : ',foundProductInWishlist)
-        if (foundProductInWishlist) {
+         
+        console.log('I am checking product in wishlist')
+        
+        const foundProductInWishlist = await wishlist.products.find(product => product.productId.toString() === id);
+        
+        console.log('foundProductInWishlist : ',foundProductInWishlist)
+        
+         if (foundProductInWishlist) {
             return res.status(400).json({success:false, message:'already in wishlist' });
         }
 
