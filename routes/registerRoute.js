@@ -5,7 +5,7 @@ import validate from "../middleware/validate.js";
 
 const router = Router();
 
-import {Register} from '../controllers/registerController.js'
+import { SignUp } from "../controllers/registerController.js";
 
 router.post("/", 
     [
@@ -14,7 +14,7 @@ router.post("/",
         body('password').notEmpty().withMessage('Password is required').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
     ],
     validate,
-    Register
+    SignUp
 );
 
 export default router;
