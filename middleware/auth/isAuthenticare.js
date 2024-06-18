@@ -13,8 +13,8 @@ const isAuthenticated = async(req,res,next) => {
             
             const decodedData = jwt.verify(token,process.env.JWT_ACCESS_TOKEN_SECRET)
             console.log('decodedData : ',decodedData)
-            const {_id} = decodedData;
-            req.user = {_id}
+            const {userId} = decodedData;
+            req.user = {userId}
 
             next()
 
