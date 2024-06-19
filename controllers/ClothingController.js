@@ -4,7 +4,7 @@ const Clothing = async(req,res) => {
     try {
         console.log('req.query : ',req.query)
         console.log('req.query : ',req.params)
-        const {categoryName} = req.query;
+        const {categoryName=[]} = req.query;
         console.log('categaryName : ',categoryName)
         //Men Clothing
         // const categoryName = ["Ethnic", "Men", "Clothing", "Sets", "Sherwani"];
