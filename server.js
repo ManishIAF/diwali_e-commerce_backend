@@ -69,16 +69,23 @@ import OtherModel from './model/Other.js'
 import ContactModel from './model/Contect.js';
 import Category from './model/CategoryModel.js';
 import Products from './model/ProductsModel.js';
-import Men_EthinicWear from './constantData/Men/EthinicMenWear.js';
+// import Men_EthinicWear from './constantData/Men/EthinicMenWear.js';
+// import sherwaniData from './constantData/Men/Sherwani.js';
+// import ethnicPajamaData from './constantData/Men/Pajama.js';
+
+// import sareeData from './constantData/Women/Saree.js';
+// import kurtaKurtiData from './constantData/Women/Kurta&Kurtis.js';
+import lehengaCholiData from './constantData/Women/Legnga&Choli.js';
 //---------------------------------------------------------------------------------------------------------
 
 app.get('/',async(req,res)=>{
-  return res.status(200).send('Welcome to the server');
+  // const products = await Products.find({}).populate('categoryIds');
+  return res.status(200).send(ethnicPajamaData);
 })
 app.post('/',async(req,res)=>{
   try {
     const category = await Category.create({
-      name: "Sherwani",
+      name: "Kids",
     });
     return res.status(200).send(category);
   } catch (error) {
@@ -89,22 +96,27 @@ app.post('/',async(req,res)=>{
 app.post('/product', async (req, res) => {
 
   try {
-    const category = await Category.find({ name: {$in:['Clothing','Ethnic','Men','Sets']} });
-    // const EthinicWare = 
-    //Men Cotton Blend Kurta Pyjama Set
-    Men_EthinicWear.forEach(async(product)=>
+    const category = await Category.find({ name: {$in:['Clothing','Ethnic','Women',"Girl",'Lehnga Choli']} });
+    
+    // Men Cotton Blend Kurta Pyjama Set
+    lehengaCholiData.forEach(async(product)=>{
+    //replace image 128/128 with 1080/1080 for better quality
+    const newImage = product.images.map((image)=>image.replace('128/128','1080/1080'))
     await Products.create({
       name:product.name,
       description:product.description,
       price:product.price,
-      images:product.images,
+      images:newImage,
       categoryIds:category.map((cat)=>cat._id),
       attributes:product.attributes,
       stockQuantity:product.stockQuantity,
     })
+  }
 )
-    const products = await Products.find({});   
-    return res.status(200).send(products);
+
+console.log('Data length : ',lehengaCholiData.length)
+    // const products = await Products.find({});   
+    return res.status(200).send(lehengaCholiData);
   } catch (error) {
     console.error('Error fetching products:', error);
     return res.status(500).send('Server Error');

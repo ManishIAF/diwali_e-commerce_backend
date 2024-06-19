@@ -2,37 +2,59 @@ import Products from "../model/ProductsModel.js"
 
 const Clothing = async(req,res) => {
     try {
-        const categoryName = ["Ethnic","Men","Clothing","Sets"]; 
+
+        const {categaryName} = req.query;
+        console.log('categaryName : ',categaryName)
+        //Men Clothing
+        // const categoryName = ["Ethnic", "Men", "Clothing", "Sets", "Sherwani"];
+        // const categoryName = ["Ethnic", "Men", "Clothing", "Pajama"];
+        // const categoryName = ["Ethnic", "Men", "Clothing", "Sets","Ethnic Sets"];
+
+        // Women Clothing
+
+        // const categoryName = ['Clothing','Ethnic','Women',"Girl",'Saree'];
+        // const categoryName = ['Clothing','Ethnic','Women',"Girl",'Kurta&Kurtis'];
+        // const categoryName = ['Clothing','Ethnic','Women',"Girl",'Lehnga Choli'];
+
         const clothing = await Products.aggregate([
             {
-              $lookup: {
-                from: 'categories', // Assuming your categories collection is named 'categories'
-                localField: 'categoryIds',
-                foreignField: '_id',
-                as: 'categories'
-              }
+                $lookup: {
+                    from: 'categories',
+                    localField: 'categoryIds',
+                    foreignField: '_id',
+                    as: 'categories'
+                }
             },
             {
-              $match: {
-                'categories.name': { $in: categoryName }
-              }
+                $addFields: {
+                    categoryNames: { $map: { input: "$categories", as: "category", in: "$$category.name" } }
+                }
             },
             {
-              $project: {
-                _id: 1,
-                name: 1,
-                description: 1,
-                price: 1,
-                images: 1,
-                stockQuantity: 1,
-                createdAt: 1,
-                updatedAt: 1,
-                categoryIds: 1
-              }
+                $match: {
+                    $expr: {
+                        $setIsSubset: [categoryName, "$categoryNames"]
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    description: 1,
+                    price: 1,
+                    images: 1,
+                    stockQuantity: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    categoryIds: 1
+                }
             }
-          ]).exec();
-        res.status(200).json(clothing)
+        ]).exec();
 
+        
+
+      res.status(200).json(clothing)
     } catch (error) {
         console.log(error)
     }

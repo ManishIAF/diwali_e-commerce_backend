@@ -17,9 +17,6 @@ const addToWishList = async(req, res)=>{
     try{
         const { id } = req.query;
         const {userId} = req.user;
-
-        console.log('userId : ',userId)
-        console.log('id : ',id)
         
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
@@ -27,8 +24,6 @@ const addToWishList = async(req, res)=>{
 
         const wishlist = await Wishlist.findOne({userId});
         
-        console.log('wishlist ID : ',wishlist?._id)
-
         if (!wishlist?._id) {
             await Wishlist.create({
                  userId,
@@ -38,26 +33,19 @@ const addToWishList = async(req, res)=>{
                  }
              });
             
-            console.log('I am adding new product to wishlist')
             return res.status(200).json({ message: 'added to wishlist',success:true });
          }
          
-        console.log('I am checking product in wishlist')
-        
         const foundProductInWishlist = await wishlist.products.find(product => product.productId.toString() === id);
-        
-        console.log('foundProductInWishlist : ',foundProductInWishlist)
         
          if (foundProductInWishlist) {
             return res.status(400).json({success:false, message:'already in wishlist' });
         }
 
-        console.log('I am checking product in wishlist')
-
         const ggg = await Wishlist.updateOne({userId}, { $push: { products: {
             productId: id,
         } } });
-        console.log('I am updating product to wishlist',ggg)
+
         return res.status(200).json({ message: 'added to wishlist',success:true });
        
     }catch(err){
