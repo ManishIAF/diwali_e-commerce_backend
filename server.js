@@ -47,6 +47,8 @@ import loginRoute from './routes/loginRoute.js'
 import wishListRoute from './routes/watchlist.js'
 import cartRoute from './routes/cartRoute.js'
 import clothingRouter from './routes/clothingRoute.js'
+import paymentRoute from './routes/PaymentRoute.js'
+import orderRoute from './routes/orderRoute.js'
 import { ErrorMiddleware } from './middleware/ErrorMiddleware.js';
 //---------------------------------------------------------------------------------------------------------
 
@@ -56,7 +58,8 @@ app.use('/wishlist', wishListRoute)
 // app.use('/register', registerRoute )
 // app.use('/login', loginRoute )
 app.use('/clothing', clothingRouter)
-
+app.use('/payment', paymentRoute)
+app.use('/saveorder', orderRoute)
 //---------------------------------------------------------------------------------------------------------
 
 
