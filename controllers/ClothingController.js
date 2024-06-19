@@ -3,6 +3,7 @@ import Products from "../model/ProductsModel.js"
 const Clothing = async(req,res) => {
     try {
         console.log('req.query : ',req.query)
+        console.log('req.query : ',req.params)
         const {categoryName} = req.query;
         console.log('categaryName : ',categoryName)
         //Men Clothing
@@ -33,7 +34,7 @@ const Clothing = async(req,res) => {
             {
                 $match: {
                     $expr: {
-                        $setIsSubset: [categoryName, "$categoryNames"]
+                        $setIsSubset: [categoryName.length>0?categoryName:[], "$categoryNames"]
                     }
                 }
             },
