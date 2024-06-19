@@ -59,7 +59,7 @@ app.use('/wishlist', wishListRoute)
 // app.use('/login', loginRoute )
 app.use('/clothing', clothingRouter)
 app.use('/payment', paymentRoute)
-app.use('/saveorder', orderRoute)
+app.use('/order', orderRoute)
 //---------------------------------------------------------------------------------------------------------
 
 

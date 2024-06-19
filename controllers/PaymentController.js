@@ -5,7 +5,7 @@ const CheckoutPayment = async (req, res) => {
   try {
     const { products, totalItems } = req.body;
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-    
+
     if (!products || !totalItems) {
       return res.status(400).send("Invalid request");
     }
@@ -30,7 +30,8 @@ const CheckoutPayment = async (req, res) => {
     });
 
     res.json({ id: session.id });
-  } catch (err) {
+  
+} catch (err) {
     console.error("Error creating checkout session:", err);
     res.status(500).send("Internal Server Error");
   }
