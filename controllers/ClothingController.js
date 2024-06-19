@@ -34,7 +34,7 @@ const Clothing = async(req,res) => {
             {
                 $match: {
                     $expr: {
-                        $setIsSubset: [categoryName.length>0?categoryName:[], "$categoryNames"]
+                        $setIsSubset: [categoryName?.length>0?categoryName:[], "$categoryNames"]
                     }
                 }
             },
