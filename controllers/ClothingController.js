@@ -3,8 +3,8 @@ import Products from "../model/ProductsModel.js"
 const Clothing = async(req,res) => {
     try {
         console.log('req.query : ',req.query)
-        const {categaryName} = req.query;
-        console.log('categaryName : ',categaryName)
+        const {categoryName} = req.query;
+        console.log('categaryName : ',categoryName)
         //Men Clothing
         // const categoryName = ["Ethnic", "Men", "Clothing", "Sets", "Sherwani"];
         // const categoryName = ["Ethnic", "Men", "Clothing", "Pajama"];
