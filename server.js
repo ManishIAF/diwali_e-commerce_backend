@@ -78,10 +78,10 @@ import Products from './model/ProductsModel.js';
 import lehengaCholiData from './constantData/Women/Legnga&Choli.js';
 //---------------------------------------------------------------------------------------------------------
 
-app.get('/',async(req,res)=>{
+// app.get('/',async(req,res)=>{
   // const products = await Products.find({}).populate('categoryIds');
-  return res.status(200).send(ethnicPajamaData);
-})
+  // return res.status(200).send(ethnicPajamaData);
+// })
 app.post('/',async(req,res)=>{
   try {
     const category = await Category.create({
