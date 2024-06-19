@@ -2,7 +2,7 @@ import Products from "../model/ProductsModel.js"
 
 const Clothing = async(req,res) => {
     try {
-
+        console.log('req.query : ',req.query)
         const {categaryName} = req.query;
         console.log('categaryName : ',categaryName)
         //Men Clothing
