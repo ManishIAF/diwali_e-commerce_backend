@@ -42,8 +42,8 @@ const upload = multer({storage : multer.memoryStorage()});
 
 //-------------------------------------------importing Routes----------------------------------------------
 
-import registerRoute from './routes/registerRoute.js'
-import loginRoute from './routes/loginRoute.js'
+// import registerRoute from './routes/registerRoute.js'
+// import loginRoute from './routes/loginRoute.js'
 import wishListRoute from './routes/watchlist.js'
 import cartRoute from './routes/cartRoute.js'
 import clothingRouter from './routes/clothingRoute.js'
@@ -53,8 +53,8 @@ import { ErrorMiddleware } from './middleware/ErrorMiddleware.js';
 //-------------------------------------------Using Routes--------------------------------------------------
 app.use('/cart', cartRoute )
 app.use('/wishlist', wishListRoute)
-app.use('/register', registerRoute )
-app.use('/login', loginRoute )
+// app.use('/register', registerRoute )
+// app.use('/login', loginRoute )
 app.use('/clothing', clothingRouter)
 
 //---------------------------------------------------------------------------------------------------------
