@@ -3,7 +3,7 @@ import Order from '../model/Order.js';
 import UserInfo from '../model/UserInfo.js';
 import Stripe from "stripe";
 
-const svaeOrderDetails = async () => {
+const svaeOrderDetails = async (req,res) => {
     
     try {
     const {userId} = req.user;
