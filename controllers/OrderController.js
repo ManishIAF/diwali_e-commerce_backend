@@ -21,17 +21,13 @@ const svaeOrderDetails = async (req,res) => {
     console.log('CartDetails : ',CartDetails);
 
     const lineItems = CartDetails?.products?.map((product) => ({
-        price_data: {
-          currency: "inr",
-          product_data: {
-            name: product.name,
-          },
-          unit_amount: product.price,
-        },
+        price: product.price,
         quantity: 1,
       }));
 
-    const session = await stripe.checkout.sessions.create({
+      console.log('lineItems : ',lineItems)
+    
+      const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
