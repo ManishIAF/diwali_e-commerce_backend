@@ -55,7 +55,7 @@ const Clothing = async(req,res) => {
 
         
 
-      res.status(200).json(clothing)
+      res.status(200).json({success:true,Data:clothing})
     } catch (error) {
         console.log(error)
     }
