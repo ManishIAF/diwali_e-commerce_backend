@@ -17,7 +17,7 @@ const svaeOrderDetails = async (req,res) => {
     const userInfo = await UserInfo.findOne({ userId });
     console.log('userInfo : ',userInfo);
 
-    const CartDetails = await Cart.findOne({ userId }).populate('products');
+    const CartDetails = await Cart.findOne({ userId }).populate('products.productId');
     console.log('CartDetails : ',CartDetails);
 
     const lineItems = CartDetails?.products?.map((product) => ({
