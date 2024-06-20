@@ -4,6 +4,7 @@ const getCart = async(req, res)=> {
     try {
         const { userId } = req.user;
         const caetData = await Cart.findOne({userId}).populate('products.productId');
+
         if (!caetData) {
           return res.status(404).json({ error: 'User not found' });
         }
@@ -49,7 +50,7 @@ const addToCart = async(req, res)=>{
         return res.status(200).json({ message: 'Cart updated successfully',success:true });
        
     }catch(err){
-        return res.send(err)
+        return res.status(500).json({success:false,message:err.message})
     }
 }
 
