@@ -3,23 +3,23 @@ import Cart from '../model/CartModel.js';
 const getCart = async(req, res)=> {
     try {
         const { userId } = req.user;
-        console.log('userId : ',userId);
+
         const caetData = await Cart.findOne({userId}).populate('products.productId');
 
-        console.log('caetData : ',caetData)
-
         if (!caetData) {
-          return res.status(404).json({ error: 'User not found' });
+          return res.status(404).json({success:false,message: 'User not found' });
         }
+        
         return res.status(200).json({success:true,Data:caetData});
-      } catch (err) {
-        return res.status(500).json({ error: 'Internal server error' });
+      
+    } catch (err) {
+        return res.status(500).json({success:false,message: 'Internal server error' });
       }
 }
 
 const addToCart = async(req, res)=>{
     try{
-        const { id } = req.query;
+        const { id,quantity } = req.query;
         const {userId} = req.user;
 
         if (!id) {
@@ -34,11 +34,11 @@ const addToCart = async(req, res)=>{
                  userId,
                  products: {
                      productId: id,
-                     // quantity: req.body.quantity
+                    //  quantity: quantity
                  }
              });
 
-                return res.status(200).json({ message: 'Cart updated successfully',success:true });
+                return res.status(200).json({ message: 'Item added to cart',success:true });
          }
 
         const foundProductInCart = await cart.products.find(product => product?.productId.toString() === id);
@@ -51,7 +51,7 @@ const addToCart = async(req, res)=>{
             await Cart.updateOne({userId}, { $push: { products: {
                 productId: id,
             } } });
-            return res.status(200).json({ message: 'Cart updated successfully',success:true });
+            return res.status(200).json({ message: 'Item added to cart',success:true });
         }
        
     }catch(err){
@@ -74,11 +74,11 @@ const removeFromCart = async(req, res)=>{
 
         console.log('deletedProduct : ',deletedProduct)
 
-        res.status(200).json({success:true,message: 'cart deleted successfully'});
+        res.status(200).json({success:true,message: 'item removed from cart'});
 
     }catch(err){
         console.log('err : ',err)
-        res.status(500).send({ error: err.message });
+        res.status(500).json({success:false,message: err.message });
     }
 }
 

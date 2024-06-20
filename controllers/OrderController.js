@@ -8,7 +8,7 @@ const svaeOrderDetails = async (req,res) => {
     try {
     const {userId} = req.user;
 
-    const { user, products, totalAmount, totalItems, recepientDetails } = req.body;
+    const {total, recepientDetails } = req.body;
     console.log('req.body : ',req.body)
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -27,7 +27,7 @@ const svaeOrderDetails = async (req,res) => {
         product_data: {
           name: product?.productId?.name,
         },
-        unit_amount: 1000*100,
+        unit_amount: product?.productId?.price*100,
       },
       quantity: 1,
       }));
@@ -44,23 +44,26 @@ const svaeOrderDetails = async (req,res) => {
     
     console.log('session : ',session?.id)
 
-    // const newOrder = new Order({
-    //   user,
-    //   products,
-    //   totaAmount,
-    //   totalItems,
-    //   recepientDetails
-    // });
+    const newOrder = new Order({
+      products:CartDetails.products.map(product => product.productId),
+      purchesedBy: userId,
+      totalAmount: total,
+      totalItems: CartDetails?.products?.length,
+      recepientDetails
+    });
 
-    // const savedOrder = await newOrder.save();
+    const savedOrder = await newOrder.save();
     res.status(200).json({success:true,Data:{id:session?.id}});
 
   } catch (error) {
-    console.error('Failed to save order:', error.message);
+    console.error('Failed to save order:', error);
     res.status(500).json({ message: 'Failed to save order', error });
   }
 };
 
-
-
-export { svaeOrderDetails };
+const paymentDetails = (req,res) => {
+  const [ success ] = req.body;
+  console.log('success : ', success)
+}
+  
+export { svaeOrderDetails, paymentDetails };
