@@ -3,7 +3,10 @@ import Cart from '../model/CartModel.js';
 const getCart = async(req, res)=> {
     try {
         const { userId } = req.user;
+        console.log('userId : ',userId);
         const caetData = await Cart.findOne({userId}).populate('products.productId');
+
+        console.log('caetData : ',caetData)
 
         if (!caetData) {
           return res.status(404).json({ error: 'User not found' });
@@ -27,7 +30,7 @@ const addToCart = async(req, res)=>{
         console.log('cart : ',cart)
 
         if (!cart?._id) {
-            const ggg = await Cart.create({
+            await Cart.create({
                  userId,
                  products: {
                      productId: id,
