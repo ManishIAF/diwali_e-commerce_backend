@@ -8,7 +8,7 @@ const svaeOrderDetails = async (req,res) => {
     try {
     const {userId} = req.user;
 
-    const {total, recepientDetails } = req.body;
+    const {recepientDetails } = req.body;
     console.log('req.body : ',req.body)
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -43,6 +43,7 @@ const svaeOrderDetails = async (req,res) => {
     });
     
     console.log('session : ',session?.id)
+    console.log('lineItems?.price_data?.unit_amount : ',lineItems?.price_data?.unit_amount)
 
     const newOrder = new Order({
       products:CartDetails.products.map(product => product.productId),
