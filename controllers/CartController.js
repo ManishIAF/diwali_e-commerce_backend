@@ -23,7 +23,6 @@ const addToCart = async(req, res)=>{
         }
 
         const cart = await Cart.findOne({userId});
-        console.log('user : ',cart)
 
         if (!cart?._id) {
             await Cart.create({
@@ -65,6 +64,9 @@ const removeFromCart = async(req, res)=>{
         }
 
         const deletedProduct = await Cart.findOneAndUpdate({ userId }, { $pull: { products: { productId: productId } } }, { new: true });
+
+        console.log('deletedProduct : ',deletedProduct)
+
         res.status(200).json({success:true,message: 'cart deleted successfully'});
 
     }catch(err){

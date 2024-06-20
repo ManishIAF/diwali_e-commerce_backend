@@ -1,8 +1,10 @@
 import {config} from 'dotenv'
 config({ path:'./config/.env.config'});
 import express from 'express'
+import cookieParse from "cookie-parser";
 import cors from 'cors'
 
+const app = express()
 
 import { v2 as cloudinary } from 'cloudinary';
 import streamifier from 'streamifier'
@@ -21,7 +23,6 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 // const { initializeApp } = require('firebase/app');
 // const { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll,uploadBytes } =require('@firebase/storage');
 //---------------------------------------------------------------------------------------------------------
-const app = express()
 
 
 import connectDB from './connect/Connect.js'
@@ -33,6 +34,8 @@ app.use(cors({
   methods:['GET','POST','PUT','DELETE']
 
 }))
+
+app.use(cookieParse(process.env.COOKIE_SECRET));
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -50,6 +53,7 @@ import clothingRouter from './routes/clothingRoute.js'
 import paymentRoute from './routes/PaymentRoute.js'
 import orderRoute from './routes/orderRoute.js'
 import { ErrorMiddleware } from './middleware/ErrorMiddleware.js';
+
 //---------------------------------------------------------------------------------------------------------
 
 //-------------------------------------------Using Routes--------------------------------------------------

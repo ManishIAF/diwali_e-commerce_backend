@@ -5,6 +5,9 @@ const userInfo = mongoose.Schema({
         type: String,
         required: true,
     },
+    email: {
+        type: String,
+    },
     addresses: {
         type: String,
     },
