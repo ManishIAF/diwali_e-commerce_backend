@@ -24,19 +24,21 @@ const addToCart = async(req, res)=>{
         }
 
         const cart = await Cart.findOne({userId});
-
+        console.log('cart : ',cart)
         if (!cart?._id) {
-            await Cart.create({
+            const ggg = await Cart.create({
                  userId,
                  products: {
                      productId: id,
                      // quantity: req.body.quantity
                  }
              });
+
+                console.log('ggg : ',ggg)
          }
 
         const foundProductInCart = await cart.products.find(product => product.productId.toString() === id);
-
+         console.lof('foundProductInCart : ',foundProductInCart)
         if (foundProductInCart) {
             return res.status(400).json({success:false, message:'Product already exists in cart' });
         }
