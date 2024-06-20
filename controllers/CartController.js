@@ -18,15 +18,12 @@ const addToCart = async(req, res)=>{
     try{
         const { id } = req.query;
         const {userId} = req.user;
-        console.log('id : ',id)
-        console.log('req query : ',req.query)
 
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
         }
 
         const cart = await Cart.findOne({userId});
-        console.log('cart : ',cart)
 
         if (!cart?._id) {
             const ggg = await Cart.create({
@@ -37,11 +34,11 @@ const addToCart = async(req, res)=>{
                  }
              });
 
-                console.log('ggg : ',ggg)
+                return res.status(200).json({ message: 'Cart updated successfully',success:true });
          }
 
-        const foundProductInCart = await cart.products.find(product => product.productId.toString() === id);
-         console.lof('foundProductInCart : ',foundProductInCart)
+        const foundProductInCart = await cart.products.find(product => product?.productId.toString() === id);
+        
         if (foundProductInCart) {
             return res.status(400).json({success:false, message:'Product already exists in cart' });
         }
@@ -50,9 +47,8 @@ const addToCart = async(req, res)=>{
             await Cart.updateOne({userId}, { $push: { products: {
                 productId: id,
             } } });
+            return res.status(200).json({ message: 'Cart updated successfully',success:true });
         }
-
-        return res.status(200).json({ message: 'Cart updated successfully',success:true });
        
     }catch(err){
         console.log('err : ',err)
