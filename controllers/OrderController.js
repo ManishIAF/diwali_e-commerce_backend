@@ -46,6 +46,7 @@ const svaeOrderDetails = async (req,res) => {
 
     const newOrder = new Order({
       products:CartDetails.products.map(product => product.productId),
+      payment_session_id: session?.id,
       purchesedBy: userId,
       totalAmount: total,
       totalItems: CartDetails?.products?.length,
@@ -61,9 +62,32 @@ const svaeOrderDetails = async (req,res) => {
   }
 };
 
-const paymentDetails = (req,res) => {
-  const [ success ] = req.body;
-  console.log('success : ', success)
+const paymentDetails = async(req,res) => {
+
+  try {
+    const {userId} = req.user;
+    const {success} = req.body;
+
+    console.log('userId : ',req.user);
+    console.log('userId : ',req.body);
+
+    const foundOrder = await Order.findOne({ purchesedBy: userId });
+
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+    if(foundOrder?._id){
+      const session = await stripe.checkout.sessions.retrieve(foundOrder.payment_session_id);
+
+      console.log('session : ',session)
+      
+    }
+
+    console.log('success : ', success)
+
+    res.status(200).json({success:true,Data:`payment ${success}`});
+  } catch (error) {
+    
+  }
 }
   
 export { svaeOrderDetails, paymentDetails };
