@@ -48,7 +48,7 @@ const svaeOrderDetails = async (req,res) => {
       products:CartDetails.products.map(product => product.productId),
       payment_session_id: session?.id,
       purchesedBy: userId,
-      totalAmount: total,
+      totalAmount: lineItems?.price_data?.unit_amount,
       totalItems: CartDetails?.products?.length,
       recepientDetails
     });
