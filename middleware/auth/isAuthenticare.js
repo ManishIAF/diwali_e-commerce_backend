@@ -19,6 +19,7 @@ const isAuthenticated = async(req,res,next) => {
             next()
 
     } catch (error) {
+        console.log('error : ',error)
         next(new ErrorHandler(403,"forbidden"))
     }
 
