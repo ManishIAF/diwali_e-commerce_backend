@@ -12,20 +12,27 @@ const svaeOrderDetails = async (req,res) => {
     console.log('req.body : ',req.body)
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-        console.log('stripe : ',stripe)
+        // console.log('stripe : ',stripe)
 
     const userInfo = await UserInfo.findOne({ userId });
     console.log('userInfo : ',userInfo);
 
     const CartDetails = await Cart.findOne({ userId }).populate('products.productId');
-    console.log('CartDetails : ',CartDetails);
-
+    // console.log('CartDetails : ',CartDetails);
+    console.log('CartDetails : ',CartDetails.products[0]);
+    
     const lineItems = CartDetails?.products?.map((product) => ({
-        price: product.price,
-        quantity: 1,
+      price_data: {
+        currency: "inr",
+        product_data: {
+          name: product?.productId?.name,
+        },
+        unit_amount: 1000*100,
+      },
+      quantity: 1,
       }));
 
-      console.log('lineItems : ',lineItems)
+      console.log('lineItems : ',lineItems[0])
     
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -35,7 +42,7 @@ const svaeOrderDetails = async (req,res) => {
         cancel_url: "http://localhost:3000/cancel",
     });
     
-    console.log('session : ',session)
+    console.log('session : ',session?.id)
 
     // const newOrder = new Order({
     //   user,
@@ -49,7 +56,7 @@ const svaeOrderDetails = async (req,res) => {
     res.status(200).json({success:true,Data:{id:session?.id}});
 
   } catch (error) {
-    console.error('Failed to save order:', error);
+    console.error('Failed to save order:', error.message);
     res.status(500).json({ message: 'Failed to save order', error });
   }
 };
