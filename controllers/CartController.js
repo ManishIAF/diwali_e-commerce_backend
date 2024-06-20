@@ -24,6 +24,7 @@ const addToCart = async(req, res)=>{
         }
 
         const cart = await Cart.findOne({userId});
+        console.log('cart : ',cart)
 
         if (!cart?._id) {
             const ggg = await Cart.create({
