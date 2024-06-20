@@ -56,6 +56,7 @@ const svaeOrderDetails = async (req,res) => {
     });
 
     const savedOrder = await newOrder.save();
+    console.log('savedOrder : ',savedOrder)
     res.status(200).json({success:true,Data:{id:session?.id}});
 
   } catch (error) {
