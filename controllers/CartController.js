@@ -20,12 +20,14 @@ const addToCart = async(req, res)=>{
         const {userId} = req.user;
         console.log('id : ',id)
         console.log('req query : ',req.query)
+
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
         }
 
         const cart = await Cart.findOne({userId});
         console.log('cart : ',cart)
+
         if (!cart?._id) {
             const ggg = await Cart.create({
                  userId,
@@ -53,6 +55,7 @@ const addToCart = async(req, res)=>{
         return res.status(200).json({ message: 'Cart updated successfully',success:true });
        
     }catch(err){
+        console.log('err : ',err)
         return res.status(500).json({success:false,message:err.message})
     }
 }
