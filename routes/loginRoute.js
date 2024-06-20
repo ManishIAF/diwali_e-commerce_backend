@@ -4,7 +4,7 @@ import { body} from 'express-validator';
 
 const router = Router();
 
-import { Login } from "../controllers/loginController.js";
+import { Login } from "../controllers/LoginController.js";
 import validate from "../middleware/validate.js";
 
 router.post("/", 
