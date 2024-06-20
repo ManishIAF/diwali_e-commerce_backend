@@ -5,7 +5,7 @@ import validate from "../middleware/validate.js";
 
 const router = Router();
 
-import { Register } from "../controllers/registerController.js";
+import { Register } from "../controllers/RegisterController.js";
 
 router.post("/", 
     [
