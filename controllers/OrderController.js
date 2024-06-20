@@ -43,13 +43,13 @@ const svaeOrderDetails = async (req,res) => {
     });
     
     console.log('session : ',session?.id)
-    console.log('lineItems?.price_data?.unit_amount : ',lineItems?.price_data?.unit_amount)
+    console.log('lineItems?.price_data?.unit_amount : ',lineItems.price_data.unit_amount)
 
     const newOrder = new Order({
       products:CartDetails.products.map(product => product.productId),
       payment_session_id: session.id,
       purchesedBy: userId,
-      totalAmount: lineItems.price_data.unit_amount,
+      totalAmount: 10000,
       totalItems: CartDetails.products.length,
       recepientDetails
     });
