@@ -27,7 +27,8 @@ const svaeOrderDetails = async (req,res) => {
         product_data: {
           name: product?.productId?.name,
         },
-        unit_amount: product?.productId?.price*100,
+        // unit_amount: product?.productId?.price*100,
+        unit_amount: 100000*100,
       },
       quantity: 1,
       }));
