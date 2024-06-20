@@ -11,7 +11,7 @@ const getCart = async(req, res)=> {
         if (!caetData) {
           return res.status(404).json({ error: 'User not found' });
         }
-        return res.json(caetData);
+        return res.json({success:true,Data:caetData});
       } catch (err) {
         return res.status(500).json({ error: 'Internal server error' });
       }
