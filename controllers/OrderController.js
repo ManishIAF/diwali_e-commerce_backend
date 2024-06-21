@@ -39,7 +39,7 @@ const svaeOrderDetails = async (req,res) => {
         cancel_url: "http://localhost:3000/cancel",
     });
     
-    console.log('checkout session : ',session?._id)
+    console.log('checkout session : ',session?.id)
 
     const foundOrder = await Order.findOne({ OrderedBy: userId });
 
@@ -110,7 +110,7 @@ const paymentDetails = async(req,res,next) => {
     }
 
 
-    res.status(200).json({success:true,Data:`payment ${success}`});
+    res.status(200).json({success:true,Data:`payment success`});
   } catch (error) {
     next(error)
   }
