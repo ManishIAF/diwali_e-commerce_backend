@@ -16,7 +16,7 @@ const orderSchema = mongoose.Schema({
     },
     payment_session_id: {
         type: String,
-        required: true
+        // required: true
     },
     products:[{
         type: mongoose.Schema.Types.ObjectId,
