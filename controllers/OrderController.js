@@ -91,7 +91,7 @@ const paymentDetails = async(req,res) => {
 
     console.log('success : ', success)
 
-    res.status(200).json({success:true,Data:`payment ${success}`});
+    res.status(200).json({success:true,Data:`payment ${success}`,session});
   } catch (error) {
     
   }
