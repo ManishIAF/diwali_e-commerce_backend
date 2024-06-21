@@ -33,8 +33,7 @@ const addToCart = async(req, res)=>{
             const ggg = await Cart.create({
                  userId,
                  products: {
-                     productId: id,
-                     quantity: quantity?quantity:1
+                     productId: id
                  }
                 });
                 console.log('ggg : ',ggg)
