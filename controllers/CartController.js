@@ -27,9 +27,17 @@ const addToCart = async(req, res)=>{
         }
 
         const cart = await Cart.findOne({userId});
+        
         console.log('cart : ',cart)
         console.log('quantity : ',quantity)
-        if (!cart?._id) {
+        
+        const foundProductInCart = await cart.products.find(product => product?.productId.toString() === id);
+
+        if (foundProductInCart) {
+            return res.status(400).json({success:false, message:'Product already exists in cart' });
+        }
+
+        // if (!cart?._id) {
             const ggg = await Cart.create({
                  userId,
                  products: {
@@ -39,21 +47,18 @@ const addToCart = async(req, res)=>{
                 console.log('ggg : ',ggg)
 
                 return res.status(200).json({ message: 'Item added to cart',success:true });
-         }
+        //  }
 
-        const foundProductInCart = await cart.products.find(product => product?.productId.toString() === id);
         
-        if (foundProductInCart) {
-            return res.status(400).json({success:false, message:'Product already exists in cart' });
-        }
 
-        if(cart?._id){
-            await Cart.updateOne({userId}, { $push: { products: {
-                    productId: id,
-                    quantity: quantity
-            }}});
-            return res.status(200).json({ message: 'Item added to cart',success:true });
-        }
+        // if(cart?._id){
+        //     const fff = await Cart.updateOne({userId}, { $push: { products: {
+        //             productId: id,
+        //             quantity: quantity
+        //     }}});
+        //     console.log('fff : ',fff)
+        //     return res.status(200).json({ message: 'Item added to cart',success:true });
+        // }
        
     }catch(err){
         console.log('err : ',err)
@@ -61,6 +66,35 @@ const addToCart = async(req, res)=>{
     }
 }
 
+const updateCart = async(req, res)=>{
+    try {
+        
+        const { id,quantity } = req.query;
+        const {userId} = req.user;
+
+        if (!id) {
+            return res.status(400).json({success:false, message:'id is required' });
+        }
+
+        const cart = await Cart.findOne({userId});
+
+
+        if (!cart?._id) {
+                return res.status(200).json({ message: 'cart not found',success:false });
+         }
+
+         const fff = await Cart.updateOne({userId}, { $push: { products: {
+                        productId: id,
+                        quantity: quantity
+                }}});
+                console.log('fff : ',fff)
+                return res.status(200).json({ message: 'Item added to cart',success:true });
+
+    } catch (error) {
+        res.status(500).json({success:false,message: error.message });
+        
+    }
+}
 const removeFromCart = async(req, res)=>{
     try{
 
@@ -84,4 +118,4 @@ const removeFromCart = async(req, res)=>{
 }
 
 
-export {addToCart,getCart,removeFromCart}
+export {addToCart,getCart,updateCart,removeFromCart}
