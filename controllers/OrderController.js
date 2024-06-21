@@ -73,7 +73,7 @@ const paymentDetails = async(req,res,next) => {
 
   try {
     const {userId} = req.user;
-    const {recepientDetails } = req.body;
+    const {sessionId,recepientDetails} = req.body;
 
     console.log('userId : ',req.user);
     console.log('userId : ',req.body);
@@ -83,7 +83,7 @@ const paymentDetails = async(req,res,next) => {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
     if(foundOrder?._id){
-      const session = await stripe.checkout.sessions.retrieve(foundOrder.payment_session_id);
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
 
       if(!session?.id) return next(new ErrorHandler(500,'payment unsucessful , please try again'));
 
