@@ -105,9 +105,10 @@ const paymentDetails = async(req,res,next) => {
         paymentMode: session.mode,
         currency: session.currency,
       });
+
+      console.log('paymentDetails : ', paymentDetails)
     }
 
-    console.log('paymentDetails : ', paymentDetails)
 
     res.status(200).json({success:true,Data:`payment ${success}`});
   } catch (error) {
