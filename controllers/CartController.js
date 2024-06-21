@@ -103,6 +103,7 @@ const updateCart = async(req, res)=>{
             { $set: { 'products.$.quantity': quantity } }
           );
         console.log('fff : ',fff)
+        
         return res.status(200).json({ message: 'Item added to cart',success:true });
 
     } catch (error) {

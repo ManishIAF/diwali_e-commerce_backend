@@ -21,19 +21,23 @@ const svaeOrderDetails = async (req,res) => {
     // console.log('CartDetails : ',CartDetails);
     console.log('CartDetails : ',CartDetails.products[0]);
     
+    // const Name = `<p>${product?.productId?.name}</p>`
+
     const lineItems = CartDetails?.products?.map((product) => ({
       price_data: {
         currency: "inr",
         product_data: {
           name: product?.productId?.name,
+          // quantity: product?.quantity,
+          // total: product?.quantity*product?.productId?.price*100,
         }, 
-        // unit_amount: product?.productId?.price*100,
-        unit_amount: 100000*100,
+        unit_amount:product?.quantity*product?.productId?.price*100,
+        // unit_amount: product?.quantity*totalAmount,
       },
-      quantity: 1,
+        quantity: product?.quantity,
       }));
 
-      console.log('lineItems : ',lineItems[0])
+      console.log('lineItems : ',lineItems)
     
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -57,7 +61,7 @@ const svaeOrderDetails = async (req,res) => {
 
     const savedOrder = await newOrder.save();
     console.log('savedOrder : ',savedOrder)
-    res.status(200).json({success:true,Data:{id:session?.id}});
+    res.status(200).json({success:true,Data:{id:session?.id,lineItems}});
 
   } catch (error) {
     console.error('Failed to save order:', error);
