@@ -45,6 +45,7 @@ const svaeOrderDetails = async (req,res) => {
 
     if(foundOrder?._id){
       const updatedOrder = await Order.findByIdAndUpdate(foundOrder._id, { 
+        OrderedBy:userId,
         products:CartDetails.products.map(product => product.productId),
         recepientDetails
       });
@@ -90,7 +91,7 @@ const paymentDetails = async(req,res,next) => {
       const paymentDetails = await Order.findByIdAndUpdate(foundOrder._id, {
         amount_total: session.amount_total,
         amount_subtotal: session.amount_subtotal,
-        OrderedBy:userId,
+        // OrderedBy:userId,
         payment_session_id: session.id,
         recepientDetails:recepientDetails?recepientDetails:foundOrder.recepientDetails,
         payedBy:{

@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 const orderSchema = mongoose.Schema({
     amount_total: {
         type:Number,
-        required:true
+        // required:true
     },
     amount_subtotal:{
         type:Number,
-        required:true
+        // required:true
     },
     OrderedBy: {
         type: mongoose.Schema.Types.ObjectId,
