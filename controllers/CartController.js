@@ -22,6 +22,9 @@ const addToCart = async(req, res)=>{
         const { id,quantity } = req.query;
         const {userId} = req.user;
 
+        console.log('req query : ',req.query)
+        console.log('req query : ',req.user)
+
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
         }
@@ -71,6 +74,9 @@ const updateCart = async(req, res)=>{
         
         const { id,quantity } = req.query;
         const {userId} = req.user;
+
+        console.log('req query : ',req.query)
+        console.log('req query : ',req.user)
 
         if (!id) {
             return res.status(400).json({success:false, message:'id is required' });
