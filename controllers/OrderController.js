@@ -69,7 +69,7 @@ const svaeOrderDetails = async (req,res) => {
   }
 };
 
-const paymentDetails = async(req,res) => {
+const paymentDetails = async(req,res,next) => {
 
   try {
     const {userId} = req.user;
@@ -91,9 +91,9 @@ const paymentDetails = async(req,res) => {
 
     console.log('success : ', success)
 
-    res.status(200).json({success:true,Data:`payment ${success}`,session});
+    res.status(200).json({success:true,Data:`payment ${success}`});
   } catch (error) {
-    
+    next(error)
   }
 }
   
