@@ -47,7 +47,7 @@ const svaeOrderDetails = async (req,res) => {
         cancel_url: "http://localhost:3000/cancel",
     });
     
-    console.log('session : ',session?.id)
+    console.log('checkout session : ',session)
     // console.log('lineItems?.price_data?.unit_amount : ',lineItems.price_data.unit_amount)
 
     const newOrder = new Order({
