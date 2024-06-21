@@ -102,8 +102,8 @@ const updateCart = async(req, res)=>{
                         productId: id,
                         quantity: quantity
                 }}});
-                console.log('fff : ',fff)
-                return res.status(200).json({ message: 'Item added to cart',success:true });
+        console.log('fff : ',fff)
+        return res.status(200).json({ message: 'Item added to cart',success:true });
 
     } catch (error) {
         res.status(500).json({success:false,message: error.message });
