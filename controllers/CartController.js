@@ -33,11 +33,13 @@ const addToCart = async(req, res)=>{
         
         console.log('cart : ',cart)
         console.log('quantity : ',quantity)
-        
-        const foundProductInCart = await cart.products.find(product => product?.productId.toString() === id);
 
-        if (foundProductInCart) {
-            return res.status(400).json({success:false, message:'Product already exists in cart' });
+        if(cart?._id){
+            const foundProductInCart = await cart.products.find(product => product?.productId.toString() === id);
+    
+            if (foundProductInCart) {
+                return res.status(400).json({success:false, message:'Product already exists in cart' });
+            }
         }
 
         // if (!cart?._id) {
