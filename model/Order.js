@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
 
 const orderSchema = mongoose.Schema({
-    totalAmount: {
+    amount_total: {
         type:Number,
         required:true
     },
-    totalItems: {
+    amount_subtotal:{
         type:Number,
         required:true
     },
-    purchesedBy: {
+    OrderedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -38,21 +38,25 @@ const orderSchema = mongoose.Schema({
         enum:["pending","completed","cancelled","shipped","delivered","returned"],
         default:"pending"
     },
+    payedBy:{
+        email:String,
+        phone:Number,
+        name:String,
+    },                                                                                                                                                                                              
     paymentStatus:{
         type:String,
         enum:["pending","completed","failed"],
         default:"pending"
     },
-    paymentType:{
+    paymentMethod:{
         type:String,
         enum:["card","cash","upi"],
         default:"card"
     },
-    paymentId:String,
     paymentToken:String,
-    paymentGateway:String,
+    paymentMode:String,
+    currency:String,
     paymentTime:Date,
-    orderTime:Date,
     deliveryTime:Date,
 
 })

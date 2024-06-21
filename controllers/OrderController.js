@@ -14,24 +14,16 @@ const svaeOrderDetails = async (req,res) => {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
         // console.log('stripe : ',stripe)
 
-    const userInfo = await UserInfo.findOne({ userId });
-    console.log('userInfo : ',userInfo);
+    // const userInfo = await UserInfo.findOne({ userId });
 
     const CartDetails = await Cart.findOne({ userId }).populate('products.productId');
-    // console.log('CartDetails : ',CartDetails);
-    console.log('CartDetails : ',CartDetails.products[0]);
-    
-    // const Name = `<p>${product?.productId?.name}</p>`
 
     const lineItems = CartDetails?.products?.map((product) => ({
       price_data: {
         currency: "inr",
         product_data: {
           name: product?.productId?.name,
-          // quantity: product?.quantity,
-          // total: product?.quantity*product?.productId?.price*100,
         }, 
-        // unit_amount:product?.quantity*product?.productId?.price*100,
         unit_amount: product?.productId?.price*100,
       },
         quantity: product?.quantity,
@@ -47,21 +39,29 @@ const svaeOrderDetails = async (req,res) => {
         cancel_url: "http://localhost:3000/cancel",
     });
     
-    console.log('checkout session : ',session)
-    // console.log('lineItems?.price_data?.unit_amount : ',lineItems.price_data.unit_amount)
+    console.log('checkout session : ',session?._id)
+
+    const foundOrder = await Order.findOne({ OrderedBy: userId });
+
+    if(foundOrder?._id){
+      const updatedOrder = await Order.findByIdAndUpdate(foundOrder._id, { 
+        products:CartDetails.products.map(product => product.productId),
+        recepientDetails
+      });
+        console.log('updatedOrder : ',updatedOrder)
+        return res.status(200).json({success:true,Data:{id:session?.id}});
+    }
 
     const newOrder = new Order({
       products:CartDetails.products.map(product => product.productId),
-      payment_session_id: session.id,
-      purchesedBy: userId,
-      totalAmount: 10000,
-      totalItems: CartDetails.products.length,
+      // payment_session_id: session.id,
+      OrderedBy: userId,
       recepientDetails
     });
 
     const savedOrder = await newOrder.save();
     console.log('savedOrder : ',savedOrder)
-    res.status(200).json({success:true,Data:{id:session?.id,lineItems}});
+    return res.status(200).json({success:true,Data:{id:session?.id}});
 
   } catch (error) {
     console.error('Failed to save order:', error);
@@ -73,7 +73,7 @@ const paymentDetails = async(req,res,next) => {
 
   try {
     const {userId} = req.user;
-    const {success} = req.body;
+    const {recepientDetails } = req.body;
 
     console.log('userId : ',req.user);
     console.log('userId : ',req.body);
@@ -85,11 +85,28 @@ const paymentDetails = async(req,res,next) => {
     if(foundOrder?._id){
       const session = await stripe.checkout.sessions.retrieve(foundOrder.payment_session_id);
 
-      console.log('session : ',session)
-      
+      if(!session?.id) return next(new ErrorHandler(500,'payment unsucessful , please try again'));
+
+      const paymentDetails = await Order.findByIdAndUpdate(foundOrder._id, {
+        amount_total: session.amount_total,
+        amount_subtotal: session.amount_subtotal,
+        OrderedBy:userId,
+        payment_session_id: session.id,
+        recepientDetails:recepientDetails?recepientDetails:foundOrder.recepientDetails,
+        payedBy:{
+          email:session.customer_details?.email,
+          name:session.customer_details?.name,
+          phone:session.customer_details?.phone
+        },
+        paymentStatus:session.payment_status,
+        paymentMethod: session.payment_method_types[0],
+        paymentToken: session.payment_intent,
+        paymentMode: session.mode,
+        currency: session.currency,
+      });
     }
 
-    console.log('success : ', success)
+    console.log('paymentDetails : ', paymentDetails)
 
     res.status(200).json({success:true,Data:`payment ${success}`});
   } catch (error) {
