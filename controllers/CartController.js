@@ -28,15 +28,16 @@ const addToCart = async(req, res)=>{
 
         const cart = await Cart.findOne({userId});
         console.log('cart : ',cart)
-
+        console.log('quantity : ',quantity)
         if (!cart?._id) {
-            await Cart.create({
+            const ggg = await Cart.create({
                  userId,
                  products: {
                      productId: id,
-                    //  quantity: quantity
+                     quantity: quantity?quantity:1
                  }
-             });
+                });
+                console.log('ggg : ',ggg)
 
                 return res.status(200).json({ message: 'Item added to cart',success:true });
          }
@@ -49,8 +50,9 @@ const addToCart = async(req, res)=>{
 
         if(cart?._id){
             await Cart.updateOne({userId}, { $push: { products: {
-                productId: id,
-            } } });
+                    productId: id,
+                    quantity: quantity
+            }}});
             return res.status(200).json({ message: 'Item added to cart',success:true });
         }
        

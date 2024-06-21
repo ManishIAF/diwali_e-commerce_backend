@@ -15,6 +15,10 @@ const Schema = new mongoose.Schema({
        type: String,
        require: true,
        default: "user",
+   },
+   refreshToken:{
+       type: String,
+       require: false,
    }
 });
 
