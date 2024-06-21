@@ -77,40 +77,41 @@ const paymentDetails = async(req,res,next) => {
     const {sessionId,recepientDetails} = req.body;
 
     console.log('userId : ',req.user);
-    console.log('userId : ',req.body);
+    console.log('req body : ',req.body);
 
     const foundOrder = await Order.findOne({ purchesedBy: userId });
-
+    console.log('foundOrder : ',foundOrder)
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
     if(foundOrder?._id){
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-
+      console.log('session : ',session)
       if(!session?.id) return next(new ErrorHandler(500,'payment unsucessful , please try again'));
 
-      const paymentDetails = await Order.findByIdAndUpdate(foundOrder._id, {
-        amount_total: session.amount_total,
-        amount_subtotal: session.amount_subtotal,
-        // OrderedBy:userId,
-        payment_session_id: session.id,
-        recepientDetails:recepientDetails?recepientDetails:foundOrder.recepientDetails,
-        payedBy:{
-          email:session.customer_details?.email,
-          name:session.customer_details?.name,
-          phone:session.customer_details?.phone
-        },
-        paymentStatus:session.payment_status,
-        paymentMethod: session.payment_method_types[0],
-        paymentToken: session.payment_intent,
-        paymentMode: session.mode,
-        currency: session.currency,
-      });
+      console.log('I am here...')
+        const paymentDetails = await Order.findByIdAndUpdate(foundOrder._id, {
+          amount_total: session.amount_total,
+          amount_subtotal: session.amount_subtotal,
+          // OrderedBy:userId,
+          payment_session_id: session.id,
+          recepientDetails:recepientDetails?recepientDetails:foundOrder.recepientDetails,
+          payedBy:{
+            email:session.customer_details?.email,
+            name:session.customer_details?.name,
+            phone:session.customer_details?.phone
+          },
+          paymentStatus:session.payment_status,
+          paymentMethod: session.payment_method_types[0],
+          paymentToken: session.payment_intent,
+          paymentMode: session.mode,
+          currency: session.currency,
+        });
 
-      console.log('paymentDetails : ', paymentDetails)
+        console.log('paymentDetails : ', paymentDetails)
+        return res.status(200).json({success:true,Data:`payment success`});
     }
 
 
-    res.status(200).json({success:true,Data:`payment success`});
   } catch (error) {
     next(error)
   }
