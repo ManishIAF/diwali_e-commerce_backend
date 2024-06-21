@@ -32,7 +32,7 @@ const svaeOrderDetails = async (req,res) => {
           // total: product?.quantity*product?.productId?.price*100,
         }, 
         // unit_amount:product?.quantity*product?.productId?.price*100,
-        unit_amount: product?.productId?.price,
+        unit_amount: product?.productId?.price*100,
       },
         quantity: product?.quantity,
       }));
