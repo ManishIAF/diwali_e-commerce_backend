@@ -98,8 +98,7 @@ const updateCart = async(req, res)=>{
                 return res.status(200).json({ message: 'cart not found',success:false });
          }
 
-         const fff = await Cart.updateOne({userId}, { $push: { products: {
-                        productId: id,
+         const fff = await Cart.updateOne({userId,'products.productId': id}, { $push: { products: {
                         quantity: quantity
                 }}});
         console.log('fff : ',fff)
