@@ -2,20 +2,27 @@ import Products from "../model/ProductsModel.js"
 
 const Clothing = async(req,res) => {
     try {
-        console.log('req.query : ',req.query)
-        console.log('req.query : ',req.params)
+
         const {categoryName=[]} = req.query;
-        console.log('categaryName : ',categoryName)
+        // console.log('categaryName : ',categoryName)
         //Men Clothing
+        // const categoryName = ["Ethnic", "Men", "Clothing", "Sets","Ethnic Sets"];
         // const categoryName = ["Ethnic", "Men", "Clothing", "Sets", "Sherwani"];
         // const categoryName = ["Ethnic", "Men", "Clothing", "Pajama"];
-        // const categoryName = ["Ethnic", "Men", "Clothing", "Sets","Ethnic Sets"];
+        // const categoryName = ["Ethnic", "Men", "Clothing", "Kurta"];
 
         // Women Clothing
 
         // const categoryName = ['Clothing','Ethnic','Women',"Girl",'Saree'];
         // const categoryName = ['Clothing','Ethnic','Women',"Girl",'Kurta&Kurtis'];
         // const categoryName = ['Clothing','Ethnic','Women',"Girl",'Lehnga Choli'];
+
+        //Kids Clothing
+        // Boys
+            // const categoryName = ["Ethnic", "Kids" , "Boy" , "Clothing", "Sets","Ethnic Sets"];
+        // Girls
+            // const categoryName = ["Ethnic", "Kids" , "Girl" , "Clothing", "Sets","Ethnic Sets"];
+
 
         const clothing = await Products.aggregate([
             {
@@ -34,7 +41,7 @@ const Clothing = async(req,res) => {
             {
                 $match: {
                     $expr: {
-                        $setIsSubset: [categoryName?.length>0?categoryName:[], "$categoryNames"]
+                        $setIsSubset: [categoryName?.length>0?categoryName:["Clothing"], "$categoryNames"]
                     }
                 }
             },
@@ -46,9 +53,10 @@ const Clothing = async(req,res) => {
                     price: 1,
                     images: 1,
                     stockQuantity: 1,
-                    createdAt: 1,
-                    updatedAt: 1,
-                    categoryIds: 1
+                    // createdAt: 1,
+                    // updatedAt: 1,
+                    // categoryIds: 1,
+                    attributes: 1
                 }
             }
         ]).exec();

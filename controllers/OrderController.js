@@ -73,6 +73,7 @@ const svaeOrderDetails = async (req,res) => {
 const paymentDetails = async(req,res,next) => {
 
   try {
+    
     const {userId} = req.user;
     const {sessionId,recepientDetails} = req.body;
 
@@ -81,6 +82,7 @@ const paymentDetails = async(req,res,next) => {
 
     const foundOrder = await Order.findOne({ purchesedBy: userId });
     console.log('foundOrder : ',foundOrder)
+
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
     if(foundOrder?._id){

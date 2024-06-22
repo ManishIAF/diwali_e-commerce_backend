@@ -78,23 +78,13 @@ import OtherModel from './model/Other.js'
 import ContactModel from './model/Contect.js';
 import Category from './model/CategoryModel.js';
 import Products from './model/ProductsModel.js';
-// import Men_EthinicWear from './constantData/Men/EthinicMenWear.js';
-// import sherwaniData from './constantData/Men/Sherwani.js';
-// import ethnicPajamaData from './constantData/Men/Pajama.js';
-
-// import sareeData from './constantData/Women/Saree.js';
-// import kurtaKurtiData from './constantData/Women/Kurta&Kurtis.js';
-import lehengaCholiData from './constantData/Women/Legnga&Choli.js';
 //---------------------------------------------------------------------------------------------------------
 
-// app.get('/',async(req,res)=>{
-  // const products = await Products.find({}).populate('categoryIds');
-  // return res.status(200).send(ethnicPajamaData);
-// })
+
 app.post('/',async(req,res)=>{
   try {
     const category = await Category.create({
-      name: "Kids",
+      name: "Kurta",
     });
     return res.status(200).send(category);
   } catch (error) {
@@ -105,10 +95,10 @@ app.post('/',async(req,res)=>{
 app.post('/product', async (req, res) => {
 
   try {
-    const category = await Category.find({ name: {$in:['Clothing','Ethnic','Women',"Girl",'Lehnga Choli']} });
+    const category = await Category.find({ name: {$in:["Ethnic", "Kids" , "Girl" , "Clothing", "Sets","Ethnic Sets"]} });
     
     // Men Cotton Blend Kurta Pyjama Set
-    lehengaCholiData.forEach(async(product)=>{
+    girlsEthnicWear.forEach(async(product)=>{
     //replace image 128/128 with 1080/1080 for better quality
     const newImage = product.images.map((image)=>image.replace('128/128','1080/1080'))
     await Products.create({
@@ -123,16 +113,86 @@ app.post('/product', async (req, res) => {
   }
 )
 
-console.log('Data length : ',lehengaCholiData.length)
+console.log('Data length : ',girlsEthnicWear.length)
     // const products = await Products.find({});   
-    return res.status(200).send(lehengaCholiData);
+    return res.status(200).send(girlsEthnicWear);
   } catch (error) {
     console.error('Error fetching products:', error);
     return res.status(500).send('Server Error');
   }
 });
 
+app.get('/ggg', async (req, res) => {
+  try {
 
+    const category = ["Ethnic", "Kids" , "Clothing", "Sets","Ethnic Sets"];
+    //find product by category
+    const products = await Products.aggregate([
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'categoryIds',
+          foreignField: '_id',
+          as: 'categories'
+        }
+      },
+      {
+        $addFields: {
+          categoryNames: { $map: { input: "$categories", as: "category", in: "$$category.name" } }
+        }
+      },
+      {
+        $match: {
+          $expr: {
+            $setIsSubset: [category, "$categoryNames"]
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          price: 1,
+          images: 1,
+          stockQuantity: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          categoryIds: 1,
+          attributes:1
+        }
+      }
+    ]).exec();
+
+    // find Category by name
+
+    const categoryData = await Category.findOne({ name: "Boy" });
+
+    console.log('categoryData : ',categoryData)
+    let count = 0;
+    
+    // for (let product of products) {
+    //   const fp = boysEthnicWear.find(p => p.name === product.name);
+    //   if (fp) {
+    //     count++;
+    //     console.log('Product:', product._id, count);
+    //     await Products.findByIdAndUpdate(
+    //       product._id,
+    //       { $push: { categoryIds: categoryData._id } },
+    //       { new: true, useFindAndModify: false }
+    //     );
+    //   }
+    // }
+
+    return res.status(200).send(products);
+
+  } catch (error) {
+
+    console.error('Error fetching products:', error);
+
+    return res.status(500).send('Server Error');
+
+  }});
 app.post('/bills', [
   body('firstName').notEmpty().withMessage('First name is required'),
     body('lastName').notEmpty().withMessage('Last name is required'),
@@ -203,14 +263,6 @@ res.send(respon)
 })
 
 
-app.get('/girl',async (req,res)=>{
-  try{
-const data = await GirlModel.find()
-return res.send(data)
-  }catch(err){
-    return res.send(err)
-  }
-})
 app.post('/girl', upload.single('image'), async (req, res) => {
   try {
     console.log('Request received:', req.body);
@@ -260,64 +312,7 @@ app.post('/girl', upload.single('image'), async (req, res) => {
     return res.status(500).json({ error: 'An error occurred' });
   }
 });
-app.put('/girl', async (req, res) => {
-  try {
-    const { id, price, q } = req.body;
 
-    
-    if (!id) {
-      return res.status(400).send({ message: 'ID is required' });
-    }
-
-    
-    const updatedProduct = await GirlModel.findByIdAndUpdate(
-      id,
-      { price, q },
-      { new: true } 
-    );
-
-    if (!updatedProduct) {
-      return res.status(404).send({ message: 'Product not found' });
-    }
-
-    return res.status(200).send(updatedProduct);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send({ message: 'Internal server error' });
-  }
-});
-app.delete('/girl', async(req, res)=>{
-  try {
-    const { id } = req.body;
-    if (!id) {
-      return res.status(400).json({ error: 'ID is required' });
-    }
-
-   
-    const deletedProduct = await GirlModel.findByIdAndDelete(id);
-
-    
-    if (!deletedProduct) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    
-    
-    return res.status(200).json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    
-    console.error('Error deleting product:', error);
-    return res.status(500).json({ error: 'An error occurred while deleting the product' });
-  }
-})
-
-app.get('/men',async (req,res)=>{
-  try{
-const data = await MenModel.find()
-return res.send(data)
-  }catch(err){
-    return res.send(err)
-  }
-})
 app.post('/men', upload.single('image'), async (req, res) => {
   try {
     console.log('Request received:', req.body);
@@ -367,65 +362,9 @@ app.post('/men', upload.single('image'), async (req, res) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 });
-app.put('/men', async (req, res) => {
-  try {
-    const { id, price, q } = req.body;
-
-    
-    if (!id) {
-      return res.status(400).send({ message: 'ID is required' });
-    }
-
-    
-    const updatedProduct = await MenModel.findByIdAndUpdate(
-      id,
-      { price, q },
-      { new: true } 
-    );
-
-    if (!updatedProduct) {
-      return res.status(404).send({ message: 'Product not found' });
-    }
-
-    res.status(200).send(updatedProduct);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send({ message: 'Internal server error' });
-  }
-});
-app.delete('/men', async(req, res)=>{
-  try {
-    const { id } = req.body;
-if (!id) {
-      return res.status(400).json({ error: 'ID is required' });
-    }
-
-   
-    const deletedProduct = await MenModel.findByIdAndDelete(id);
-
-    
-    if (!deletedProduct) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-   
-    return res.status(200).json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    
-    console.error('Error deleting product:', error);
-    return res.status(500).json({ error: 'An error occurred while deleting the product' });
-  }
-})
 
 
-app.get('/others',async (req,res)=>{
-  try{
-const data = await OtherModel.find()
-return res.send(data)
-  }catch(err){
-    return res.send(err)
-  }
-})
+
 app.post('/others', upload.single('image'), async (req, res) => {
     try {
       console.log('Request received:', req.body);
@@ -475,55 +414,6 @@ app.post('/others', upload.single('image'), async (req, res) => {
       res.status(500).json({ error: 'An error occurred' });
     }
 });
-app.put('/others', async (req, res) => {
-  try {
-    const { id, price, q } = req.body;
-
-    
-    if (!id) {
-      return res.status(400).send({ message: 'ID is required' });
-    }
-
-    
-    const updatedProduct = await OtherModel.findByIdAndUpdate(
-      id,
-      { price, q },
-      { new: true } 
-    );
-
-    if (!updatedProduct) {
-      return res.status(404).send({ message: 'Product not found' });
-    }
-
-    res.status(200).send(updatedProduct);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send({ message: 'Internal server error' });
-  }
-});
-app.delete('/other', async(req, res)=>{
-  try {
-    const { id } = req.body;
-if (!id) {
-      return res.status(400).json({ error: 'ID is required' });
-    }
-
-   
-    const deletedProduct = await OtherModel.findByIdAndDelete(id);
-
-    
-    if (!deletedProduct) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-   
-    res.status(200).json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    
-    console.error('Error deleting product:', error);
-    return res.status(500).json({ error: 'An error occurred while deleting the product' });
-  }
-})
 
 app.post('/others-data', async (req, res) => {
   const {seller} = req.body

@@ -11,7 +11,7 @@ const Schema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Category'
     }],
-    attributes:Object,
+    attributes:mongoose.Schema.Types.Mixed,
     stockQuantity: Number,
   },{
     timestamps: true

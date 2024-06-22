@@ -1,28 +1,34 @@
 import mongoose from 'mongoose';
 
 const orderSchema = mongoose.Schema({
+    
     amount_total: {
         type:Number,
         // required:true
     },
+    
     amount_subtotal:{
         type:Number,
         // required:true
     },
+    
     OrderedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
+    
     payment_session_id: {
         type: String,
         // required: true
     },
+    
     products:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
         required:true
     }],
+
     recepientDetails:{
         name:String,
         email:String,
